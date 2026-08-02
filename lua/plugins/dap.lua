@@ -4,10 +4,10 @@ return {
     optional = true,
     opts = function()
       local dap = require("dap")
+      local host = "127.0.0.1"
+      local port = 4040
       dap.adapters.go_external = function(callback, config)
         -- 1. Choose a random available port for Delve to listen on
-        local host = "127.0.0.1"
-        local port = 4040
 
         -- 2. Define your external terminal execution command
         -- Example uses Alacritty. Replace with your terminal (e.g., 'kitty', 'gnome-terminal --', 'iTerm2')
@@ -41,8 +41,8 @@ return {
         if config.mode == "remote" and config.request == "attach" then
           callback({
             type = "server",
-            host = config.host or "127.0.0.1",
-            port = config.port or "4040",
+            host = config.host or host,
+            port = config.port or port,
           })
         end
       end
