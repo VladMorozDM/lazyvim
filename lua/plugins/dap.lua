@@ -46,6 +46,13 @@ return {
           })
         end
       end
+      dap.adapters.delve = function(callback, config)
+        callback({
+          type = "server",
+          host = config.host or host,
+          port = config.port or port,
+        })
+      end
 
       -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
       dap.configurations.go = {
@@ -60,6 +67,14 @@ return {
           name = "Attach to existing server",
           request = "attach",
           mode = "remote",
+        },
+        {
+          type = "delve",
+          name = "Delve test debug",
+          request = "launch",
+          program = "${fileDirname}",
+          mode = "test",
+          outputMode = "remote",
         },
       }
     end,
