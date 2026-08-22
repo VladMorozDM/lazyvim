@@ -33,7 +33,7 @@ M.layout = {
 
 -- ; , " | and \ are structural in 'langmap' and have to be escaped (:h 'langmap')
 local function escape(char)
-  return (char:gsub("([\\,;\"|])", "\\%1"))
+  return (char:gsub('([\\,;"|])', "\\%1"))
 end
 
 --- Ukrainian character -> the US key in the same position (`ц` -> `w`).
@@ -128,67 +128,6 @@ function M.setup_mini_ai()
         end, { expr = true, remap = true, desc = "mini.ai " .. name .. " (uk)" })
       end
     end
-  end
-end
-
-function M.enabled(buf)
-  return vim.b[buf or 0].ukrainian == true
-end
-
-function M.enable(buf)
-  buf = buf or vim.api.nvim_get_current_buf()
-  for _, pair in ipairs(M.layout) do
-    vim.keymap.set("i", lhs(pair[1]), pair[2], { buffer = buf, desc = "Ukrainian layout" })
-  end
-  vim.b[buf].ukrainian = true
-end
-
-function M.disable(buf)
-  buf = buf or vim.api.nvim_get_current_buf()
-  for _, pair in ipairs(M.layout) do
-    pcall(vim.keymap.del, "i", lhs(pair[1]), { buffer = buf })
-  end
-  vim.b[buf].ukrainian = false
-end
-
-function M.toggle(buf)
-  if M.enabled(buf) then
-    M.disable(buf)
-  else
-    M.enable(buf)
-  end
-end
-
-function M.setup()
-  vim.o.langmap = M.langmap()
-
-  vim.api.nvim_create_user_command("UkrainianToggle", function()
-    M.toggle()
-  end, { desc = "Toggle the Ukrainian insert-mode layout for this buffer" })
-
-  local ok = pcall(function()
-    Snacks.toggle
-      .new({
-        id = "ukrainian",
-        name = "Ukrainian Layout",
-        get = function()
-          return M.enabled()
-        end,
-        set = function(state)
-          if state then
-            M.enable()
-          else
-            M.disable()
-          end
-        end,
-      })
-      :map("<leader>uu")
-  end)
-
-  if not ok then
-    vim.keymap.set("n", "<leader>uu", function()
-      M.toggle()
-    end, { desc = "Toggle Ukrainian Layout" })
   end
 end
 
