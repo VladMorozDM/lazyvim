@@ -212,3 +212,6 @@ vim.keymap.set("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous
 
 -- lua
 -- vim.keymap.set({"n", "x"}, "<localleader>r", function() Snacks.debug.run() end, { desc = "Run Lua", ft = "lua" })
+
+-- ukrainian layout: 'langmap' for commands + <leader>uu for insert mode
+require("config.ukrainian").setup()
